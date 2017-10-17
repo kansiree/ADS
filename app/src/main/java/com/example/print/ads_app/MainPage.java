@@ -22,7 +22,7 @@ import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by print on 10/9/2017.
  */
 
@@ -31,80 +31,70 @@ public class MainPage extends Fragment {
     RecyclerView recyclerView;
     InterstitialAd interstitialAd;
     int CountPage=0;
+    AdRequest adRequest;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
-        interstitialAd = new InterstitialAd(getContext());
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("D35920536DA5B844062DBE9D5C22D428").build();
-        interstitialAd.setAdUnitId("ca-app-pub-8549639420372799/1967421820");
-        interstitialAd.loadAd(adRequest);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
+        interstitialAd = new InterstitialAd(getContext());
+        adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("D35920536DA5B844062DBE9D5C22D428").build();
+        interstitialAd.setAdUnitId("ca-app-pub-8549639420372799/1967421820");
 
         Card_Adapter adapter = new Card_Adapter(setData(),getContext());
         adapter.setItemClick(new Card_Adapter.OnClickItem() {
             @Override
             public void OnItemClick(View view, int position) {
-                System.out.println("setItemClick: "+interstitialAd.isLoaded());
+                interstitialAd.loadAd(adRequest);
                 switch (position){
                     case 0:
                         if(interstitialAd.isLoaded()){
+                            CountPage=0;
                             interstitialAd.show();
-//                            CountPage=0;
-
                         }else {
-                            ChangPage(new MenuOne());
                             CountPage=0;
                         }
                         break;
                     case 1:
                         if(interstitialAd.isLoaded()){
-                            interstitialAd.show();
                             CountPage=1;
+                            interstitialAd.show();
                         }else {
-                            ChangPage(new MenuTwo());
                             CountPage=1;
                         }
                         break;
                     case 2:
                         if(interstitialAd.isLoaded()){
-
-                            interstitialAd.show();
                             CountPage=2;
+                            interstitialAd.show();
+
                         }else {
-                            ChangPage(new MenuThree());
                             CountPage=2;
                         }
                         break;
                     case 3:
                         if(interstitialAd.isLoaded()){
-
-                            interstitialAd.show();
                             CountPage=3;
+                            interstitialAd.show();
                         }else {
-                            ChangPage(new MenuFoure());
                             CountPage=3;
                         }
                         break;
                     case 4:
                         if(interstitialAd.isLoaded()){
-
-                            interstitialAd.show();
                             CountPage=4;
+                            interstitialAd.show();
                         }else {
-                            ChangPage(new MenuFive());
                             CountPage=4;
                         }
                         break;
                     case 5:
                         if(interstitialAd.isLoaded()){
-                            interstitialAd.show();
                             CountPage=5;
-
+                            interstitialAd.show();
                         }else {
-                            ChangPage(new MenuSix());
                             CountPage=5;
                         }
                         break;
@@ -115,9 +105,14 @@ public class MainPage extends Fragment {
 
         interstitialAd.setAdListener(new AdListener(){
             @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                interstitialAd.show();
+            }
+
+            @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                System.out.println("onAdClosed: "+CountPage);
                 switch (CountPage){
                     case 0:
                         ChangPage(new MenuOne());
@@ -147,8 +142,10 @@ public class MainPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
         recyclerView = view.findViewById(R.id.List);
+
         return view;
     }
+
     private ArrayList<Card_model> setData(){
         int[] picture = {R.drawable.ic_1,R.drawable.ic_2,R.drawable.ic_3,
         R.drawable.ic_4,R.drawable.ic_5,R.drawable.ic_6};
@@ -175,6 +172,7 @@ public class MainPage extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
-
     }
+
+
 }
