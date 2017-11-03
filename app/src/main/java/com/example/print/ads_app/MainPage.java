@@ -17,10 +17,11 @@ import com.example.print.ads_app.PageMenu.MenuSix;
 import com.example.print.ads_app.PageMenu.MenuThree;
 import com.example.print.ads_app.PageMenu.MenuTwo;
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
+
+import static com.example.print.ads_app.MainActivity.adRequest1;
 
 /*
  * Created by print on 10/9/2017.
@@ -29,9 +30,9 @@ import java.util.ArrayList;
 public class MainPage extends Fragment {
 
     RecyclerView recyclerView;
-    InterstitialAd interstitialAd;
+    InterstitialAd interstitialAd=MainActivity.interstitialAd;
     int CountPage=0;
-    AdRequest adRequest;
+    int countClick=0;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -39,62 +40,65 @@ public class MainPage extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
-        interstitialAd = new InterstitialAd(getContext());
-        adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("D35920536DA5B844062DBE9D5C22D428").build();
-        interstitialAd.setAdUnitId("ca-app-pub-8549639420372799/1967421820");
 
         Card_Adapter adapter = new Card_Adapter(setData(),getContext());
+
         adapter.setItemClick(new Card_Adapter.OnClickItem() {
             @Override
             public void OnItemClick(View view, int position) {
-                interstitialAd.loadAd(adRequest);
+
+
                 switch (position){
                     case 0:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
+                            Loadfinish(0);
                             CountPage=0;
-                            interstitialAd.show();
                         }else {
-                            CountPage=0;
+                            LoadFail(0);
                         }
                         break;
                     case 1:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
+                            Loadfinish(1);
                             CountPage=1;
-                            interstitialAd.show();
+
                         }else {
-                            CountPage=1;
+                            LoadFail(1);
                         }
                         break;
                     case 2:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
                             CountPage=2;
-                            interstitialAd.show();
-
+                            Loadfinish(2);
                         }else {
                             CountPage=2;
+                            LoadFail(2);
                         }
                         break;
                     case 3:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
                             CountPage=3;
-                            interstitialAd.show();
+                            Loadfinish(3);
                         }else {
                             CountPage=3;
+                            LoadFail(3);
                         }
                         break;
                     case 4:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
                             CountPage=4;
-                            interstitialAd.show();
+                            Loadfinish(4);
                         }else {
                             CountPage=4;
+                            LoadFail(4);
                         }
                         break;
                     case 5:
-                        if(interstitialAd.isLoaded()){
+                        if(MainActivity.interstitialAd.isLoaded()){
                             CountPage=5;
-                            interstitialAd.show();
+                            Loadfinish(5);
                         }else {
+                            LoadFail(5);
                             CountPage=5;
                         }
                         break;
@@ -103,16 +107,17 @@ public class MainPage extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
-        interstitialAd.setAdListener(new AdListener(){
+        MainActivity.interstitialAd.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
-                interstitialAd.show();
+                System.out.println("loadAd: "+MainActivity.interstitialAd.isLoaded());
             }
 
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
+                MainActivity.interstitialAd.loadAd(adRequest1);
                 switch (CountPage){
                     case 0:
                         ChangPage(new MenuOne());
@@ -135,6 +140,7 @@ public class MainPage extends Fragment {
                 }
             }
         });
+
     }
 
     @Nullable
@@ -142,7 +148,6 @@ public class MainPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_page, container, false);
         recyclerView = view.findViewById(R.id.List);
-
         return view;
     }
 
@@ -174,5 +179,170 @@ public class MainPage extends Fragment {
         outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
     }
 
+    private void Loadfinish(int index){
+        switch (index){
+            case 0:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuOne());
+                }
+                break;
+            case 1:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuTwo());
+                }
+                break;
+            case 2:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuThree());
+                }
+                break;
+            case 3:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuFoure());
+                }
+                break;
+            case 4:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuFive());
+                }
+                break;
+            case 5:
+                if(countClick==0){
+                    MainActivity.interstitialAd.show();
+                    countClick++;
+                }
+                else{
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                    ChangPage(new MenuSix());
+                }
+                break;
+        }
+    }
 
+    private void LoadFail(int index){
+        switch (index){
+            case 0:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuOne());
+                break;
+            case 1:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuTwo());
+                break;
+            case 2:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuThree());
+                break;
+            case 3:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuFoure());
+                break;
+            case 4:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuFive());
+                break;
+            case 5:
+                if(countClick>0){
+                    countClick++;
+                    if(countClick>=4){
+                        countClick=0;
+                    }
+                }
+                else if(countClick==0){
+                    countClick++;
+                }
+                CountPage=0;
+                ChangPage(new MenuSix());
+                break;
+        }
+
+    }
 }
